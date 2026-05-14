@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AcF Outbound Agent — Odoo Partnership Program</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f8f7;color:#1a1a18;font-size:14px}
+.wrap{max-width:780px;margin:0 auto;padding:24px 20px}
+.header{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding:16px 20px;background:#fff;border:1px solid #e8e8e4;border-radius:12px}
+.logo{width:42px;height:42px;border-radius:10px;background:#E6F1FB;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.hbadges{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600}
+.p-teal{background:#E1F5EE;color:#0F6E56}.p-blue{background:#E6F1FB;color:#185FA5}.p-gray{background:#F1EFE8;color:#5F5E5A}
+.p-amber{background:#FAEEDA;color:#854F0B}.p-coral{background:#FAECE7;color:#993C1D}.p-green{background:#EAF3DE;color:#3B6D11}
+.p-ai{background:#EEEDFE;color:#534AB7}
+.tabs{display:flex;gap:2px;border-bottom:1px solid #e8e8e4;margin-bottom:20px}
+.tab{padding:9px 16px;font-size:13px;background:transparent;border:none;cursor:pointer;color:#888;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:inherit;white-space:nowrap;transition:color .15s}
+.tab.on{color:#1a1a18;border-bottom-color:#1a1a18;font-weight:600}
+.tab:hover:not(.on){color:#1a1a18}
+.pane{display:none}.pane.on{display:block}
+.card{background:#fff;border:1px solid #e8e8e4;border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.slbl{font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+input,select,textarea{width:100%;font-family:inherit;font-size:13px;padding:8px 11px;border:1px solid #e0e0db;border-radius:8px;background:#fff;color:#1a1a18;outline:none;transition:border .15s}
+input:focus,select:focus,textarea:focus{border-color:#999}
+textarea{min-height:58px;resize:vertical;line-height:1.6}
+.divider{border:none;border-top:1px solid #e8e8e4;margin:12px 0}
+.btn{padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;transition:all .15s;white-space:nowrap}
+.btn-p{background:#1a1a18;color:#fff;border:none;font-weight:600}
+.btn-p:hover{background:#333}.btn-p:disabled{opacity:.4;cursor:not-allowed}
+.btn-s{background:transparent;color:#1a1a18;border:1px solid #d0d0cc}
+.btn-s:hover{background:#f5f5f3}
+.btn-g{background:transparent;color:#666;border:none;padding:5px 10px;font-size:12px;border-radius:7px}
+.btn-g:hover{background:#f5f5f3;color:#1a1a18}
+.arow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.notice{background:#EBF4FF;border:1px solid #B5D4F4;border-radius:8px;padding:10px 14px;font-size:12px;color:#185FA5;line-height:1.6;margin-bottom:12px}
+.warn{background:#FAEEDA;border:1px solid #FAC775;border-radius:8px;padding:10px 14px;font-size:12px;color:#854F0B;line-height:1.6;margin-bottom:12px}
+.ok{background:#E1F5EE;border:1px solid #9FE1CB;border-radius:8px;padding:10px 14px;font-size:12px;color:#0F6E56;line-height:1.5;margin-bottom:12px;display:none}
+.preview{background:#f8f8f7;border:1px solid #e8e8e4;border-radius:8px;padding:14px;font-size:13px;line-height:1.8;color:#1a1a18;white-space:pre-wrap;min-height:100px}
+.typing::after{content:'▋';animation:blink .7s infinite;color:#999}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.spin{animation:spin 1s linear infinite;display:inline-block}
+.stat-g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.stat{background:#fff;border:1px solid #e8e8e4;border-radius:10px;padding:14px;text-align:center}
+.snum{font-size:24px;font-weight:700;color:#1a1a18}
+.slb2{font-size:11px;color:#888;margin-top:3px}
+.lead-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #e8e8e4}
+.lead-row:last-child{border-bottom:none}
+.av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.av-b{background:#E6F1FB;color:#185FA5}.av-t{background:#E1F5EE;color:#0F6E56}
+.av-p{background:#EEEDFE;color:#534AB7}.av-c{background:#FAECE7;color:#993C1D}
+.li{flex:1;min-width:0}
+.ln{font-size:13px;font-weight:600;color:#1a1a18}
+.ls{font-size:12px;color:#888;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.irow{display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;font-size:12px;border-bottom:1px solid #f0f0ec}
+.irow:last-child{border-bottom:none}
+.irow .lb{color:#888;min-width:150px}
+.irow .vl{color:#1a1a18;font-weight:500;text-align:right;flex:1;word-break:break-word}
+.step{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid #e8e8e4}
+.step:last-child{border-bottom:none}
+.sn{width:26px;height:26px;border-radius:50%;background:#f5f5f3;border:1px solid #e0e0db;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;color:#888;margin-top:1px}
+.sc{flex:1}.st{font-size:13px;font-weight:600;color:#1a1a18}
+.sd{font-size:12px;color:#666;margin-top:4px;line-height:1.6}
+.cbadge{display:inline-flex;align-items:center;gap:3px;font-size:10px;padding:2px 8px;border-radius:99px;font-weight:600;margin-left:6px;vertical-align:middle}
+.cb-g{background:#fce8e6;color:#c5221f}.cb-c{background:#e8f0fe;color:#1a73e8}.cb-d{background:#F1EFE8;color:#5F5E5A}
+.tone-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.tone-opt{padding:5px 13px;border:1px solid #d0d0cc;border-radius:99px;font-size:12px;cursor:pointer;background:transparent;color:#666;font-family:inherit;transition:all .15s}
+.tone-opt.sel{background:#1a1a18;color:#fff;border-color:#1a1a18}
+.prog-wrap{margin-bottom:12px;display:none}
+.prog-bar{height:3px;background:#e8e8e4;border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;background:#1a1a18;border-radius:99px;transition:width .4s ease;width:0}
+.prog-lbl{font-size:11px;color:#888;margin-top:5px}
+.subj-line{font-size:12px;color:#666;padding:7px 11px;background:#f8f8f7;border-radius:7px;margin-bottom:8px;display:none;border:1px solid #e8e8e4}
+.refine-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+.hist-item{padding:11px;border:1px solid #e8e8e4;border-radius:9px;margin-bottom:7px;cursor:pointer;transition:background .15s}
+.hist-item:hover{background:#f5f5f3}
+.hi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.hi-name{font-size:13px;font-weight:600;color:#1a1a18}
+.hi-preview{font-size:11px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="header">
+  <div class="logo">🤖</div>
+  <div>
+    <div style="font-size:16px;font-weight:700">AcF Outbound Agent <span class="pill p-ai" style="font-size:10px;vertical-align:middle">✨ AI-powered</span></div>
+    <div style="font-size:11px;color:#888;margin-top:2px">Odoo Accounting Firm Partnership Program · David Deutsch</div>
+  </div>
+  <div class="hbadges">
+    <span class="pill p-teal">📧 Gmail</span>
+    <span class="pill p-blue">💬 GChat</span>
+    <span class="pill p-gray">📞 Dialpad</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab on" onclick="go('compose')">✍️ Compose</button>
+  <button class="tab" onclick="go('cadence')">📅 14-Day Cadence</button>
+  <button class="tab" onclick="go('leads')">👥 Lead Queue</button>
+  <button class="tab" onclick="go('history')">🕐 History</button>
+  <button class="tab" onclick="go('setup')">⚙️ Setup</button>
+</div>
+
+<!-- COMPOSE -->
+<div id="pane-compose" class="pane on">
+
+  <div class="card">
+    <div class="slbl">Lead details</div>
+    <div class="g2">
+      <input id="lname" placeholder="Contact first name" value="Sarah">
+      <input id="fname" placeholder="Firm name" value="Pinnacle Bookkeeping LLC">
+    </div>
+    <div class="g2">
+      <select id="ltitle">
+        <option>CPA / Certified Public Accountant</option>
+        <option>Bookkeeper</option>
+        <option>Controller</option>
+        <option>Fractional CFO</option>
+        <option>Firm Partner / Principal</option>
+        <option>Director of Client Accounting Services</option>
+      </select>
+      <select id="lsoft">
+        <option>QuickBooks Online</option>
+        <option>Xero</option>
+        <option>Sage</option>
+        <option>NetSuite</option>
+        <option>Multiple / Varies</option>
+        <option>Unknown</option>
+      </select>
+    </div>
+    <div class="g3">
+      <select id="lsize">
+        <option>1–20 clients</option>
+        <option>21–50 clients</option>
+        <option>51–100 clients</option>
+        <option>100+ clients</option>
+      </select>
+      <select id="lind">
+        <option>General / Mixed</option>
+        <option>E-commerce & Retail</option>
+        <option>Manufacturing</option>
+        <option>Professional Services</option>
+        <option>Construction</option>
+        <option>Non-Profit</option>
+        <option>Healthcare</option>
+      </select>
+      <select id="lhow">
+        <option>Odoo trial / CRM lead</option>
+        <option>Referred by DS rep</option>
+        <option>Directory self-registered</option>
+        <option>Inbound inquiry</option>
+        <option>Cold outbound</option>
+      </select>
+    </div>
+    <textarea id="lnotes" placeholder="Extra context: pain points, CRM notes, things they've mentioned, industry specifics..."></textarea>
+  </div>
+
+  <div class="card">
+    <div class="slbl">Outreach settings</div>
+    <div class="g2" style="margin-bottom:10px">
+      <select id="channel">
+        <option value="gmail">Gmail — email outreach</option>
+        <option value="gchat">Google Chat — direct message</option>
+        <option value="dialpad">Dialpad — voicemail script</option>
+        <option value="sequence">Full 14-day sequence</option>
+      </select>
+      <select id="tpl">
+        <option value="d1">Angle: Free client user seat</option>
+        <option value="d2">Angle: ERP integration & automation</option>
+        <option value="d3">Angle: Directory listing & growth</option>
+        <option value="handoff">Angle: DS/CS rep handoff to David</option>
+        <option value="reactivate">Angle: Re-engage (Not Active)</option>
+        <option value="breakup">Angle: Day 14 break-up email</option>
+        <option value="auto">Auto — agent picks best angle</option>
+      </select>
+    </div>
+    <div class="slbl" style="margin-bottom:6px">Tone</div>
+    <div class="tone-row">
+      <button class="tone-opt sel" onclick="setTone(this,'professional')">Professional</button>
+      <button class="tone-opt" onclick="setTone(this,'conversational')">Conversational</button>
+      <button class="tone-opt" onclick="setTone(this,'direct')">Direct & punchy</button>
+      <button class="tone-opt" onclick="setTone(this,'warm')">Warm & consultative</button>
+    </div>
+    <div class="arow">
+      <button class="btn btn-p" id="genbtn" onclick="generate()">✨ Generate with AI</button>
+      <button class="btn btn-s" onclick="window.open('https://claude.ai','_blank')">Ask Claude a question ↗</button>
+    </div>
+  </div>
+
+  <div id="prog-wrap" class="prog-wrap">
+    <div class="prog-bar"><div id="prog-fill" class="prog-fill"></div></div>
+    <div id="prog-lbl" class="prog-lbl">Generating personalized outreach...</div>
+  </div>
+  <div id="ok-bar" class="ok"></div>
+
+  <div id="preview-card" class="card" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div>
+        <div class="slbl" style="margin-bottom:3px">AI-generated outreach <span class="pill p-ai" style="font-size:10px;vertical-align:middle">✨ Claude</span></div>
+        <div id="ch-badge"></div>
+      </div>
+      <div style="display:flex;gap:4px">
+        <button class="btn btn-g" onclick="copyOut()">📋 Copy</button>
+        <button class="btn btn-g" id="open-btn" onclick="openChannel()">📤 <span id="open-lbl">Open in Gmail</span></button>
+      </div>
+    </div>
+    <div id="subj-line" class="subj-line"></div>
+    <div id="preview-body" class="preview"></div>
+    <div class="divider"></div>
+    <div class="slbl" style="margin-bottom:6px">Refine with AI</div>
+    <div class="refine-grid">
+      <button class="btn btn-s" style="font-size:12px;padding:6px 11px" onclick="refine('Make it shorter and punchier — 4-5 sentences max, keep the CTA and booking link')">Shorter & punchier</button>
+      <button class="btn btn-s" style="font-size:12px;padding:6px 11px" onclick="refine('Rewrite leaning harder into the free client user seat — zero cost to firm, zero added cost to their clients subscription')">Lean into free seat</button>
+      <button class="btn btn-s" style="font-size:12px;padding:6px 11px" onclick="refine('Add a P.S. line about the Odoo partner directory listing driving inbound client leads to the firm')">Add P.S. directory</button>
+      <button class="btn btn-s" style="font-size:12px;padding:6px 11px" onclick="refine('Convert to a Google Chat DM — shorter, casual, 3-4 sentences, keep booking link, no subject line')">Convert to GChat</button>
+      <button class="btn btn-s" style="font-size:12px;padding:6px 11px" onclick="refine('Add a specific pain-point callout about manual data entry and reconciliation frustrations across multiple clients')">Add pain-point hook</button>
+      <button class="btn btn-s" style="font-size:12px;padding:6px 11px" onclick="refine('Write a 30-second Dialpad voicemail script version of this outreach')">Convert to voicemail</button>
+    </div>
+  </div>
+</div>
+
+<!-- CADENCE -->
+<div id="pane-cadence" class="pane">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div>
+        <div class="slbl" style="margin-bottom:2px">14-day multi-channel cadence</div>
+        <div style="font-size:12px;color:#666">6 touchpoints across 3 channels — from your Partnership Architecture strategy</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="sn">1</div>
+      <div class="sc">
+        <div class="st">Day 1 — Cold email <span class="cbadge cb-g">📧 Gmail</span></div>
+        <div class="sd">Lead with free client user seat OR directory listing angle based on firm profile. Always include the Book a Discovery Call CTA link. Subject A/B: "Complimentary Odoo Partner Program" vs "Join Our Verified Directory."</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="sn">2</div>
+      <div class="sc">
+        <div class="st">Day 3 — Follow-up email <span class="cbadge cb-g">📧 Gmail</span></div>
+        <div class="sd">Light bump. Reference their specific software pain (manual reconciliation across QuickBooks clients, etc). Keep to 3 sentences + CTA. Don't repeat the full pitch.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="sn">3</div>
+      <div class="sc">
+        <div class="st">Day 5 — Google Chat DM <span class="cbadge cb-c">💬 GChat</span></div>
+        <div class="sd">Different channel breaks inbox pattern. Casual, brief. "Hey [Name], wanted to make sure my note didn't get buried — this 15-min call could genuinely be worth your time."</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="sn">4</div>
+      <div class="sc">
+        <div class="st">Day 7 — ERP integration email <span class="cbadge cb-g">📧 Gmail</span></div>
+        <div class="sd">Switch to Draft 2 angle — AI-powered invoice digitization, 95% auto-reconciliation, full ERP visibility. Different value prop from Day 1 to avoid repetition fatigue.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="sn">5</div>
+      <div class="sc">
+        <div class="st">Day 10 — Dialpad call / voicemail drop <span class="cbadge cb-d">📞 Dialpad</span></div>
+        <div class="sd">30-second voicemail. Reference prior emails. End: "I'll send one final note — just 15 minutes can save your firm significant overhead." Tag @Nada in CRM chatter if firm has complex tech needs.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="sn">6</div>
+      <div class="sc">
+        <div class="st">Day 14 — Break-up email <span class="cbadge cb-g">📧 Gmail</span></div>
+        <div class="sd">Permission close. "Should I keep you on my radar for Q3, or remove you from my list?" If no reply → tag <strong>AcF - Not Active</strong> in Odoo CRM. High priority for Bri to re-engage later.</div>
+      </div>
+    </div>
+  </div>
+  <div class="arow">
+    <button class="btn btn-p" onclick="go('compose');document.getElementById('channel').value='sequence';document.getElementById('tpl').value='auto'">✨ Generate full sequence for current lead</button>
+  </div>
+</div>
+
+<!-- LEADS -->
+<div id="pane-leads" class="pane">
+  <div class="stat-g">
+    <div class="stat"><div class="snum">12</div><div class="slb2">In queue</div></div>
+    <div class="stat"><div class="snum">4</div><div class="slb2">Contacted</div></div>
+    <div class="stat"><div class="snum">2</div><div class="slb2">Call booked</div></div>
+    <div class="stat"><div class="snum">1</div><div class="slb2">In onboarding</div></div>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div class="slbl" style="margin-bottom:0">Lead queue (sample)</div>
+    </div>
+    <div class="notice">These are sample leads. Connect your Odoo CRM (Settings → Technical → API Keys → New) to pull your real AcF-tagged pipeline. Click "Use" to pre-fill the Compose tab.</div>
+    <div class="lead-row">
+      <div class="av av-b">SH</div>
+      <div class="li">
+        <div class="ln">Sarah Hartman <span class="pill p-amber" style="font-size:10px;padding:1px 7px;margin-left:4px">Not contacted</span></div>
+        <div class="ls">Pinnacle Bookkeeping LLC · CPA · QuickBooks · E-commerce · 30 clients</div>
+      </div>
+      <button class="btn btn-g" onclick="loadLead('Sarah','Pinnacle Bookkeeping LLC','CPA / Certified Public Accountant','QuickBooks Online','21–50 clients','E-commerce & Retail','Odoo trial / CRM lead','Runs a QuickBooks practice for 30 e-commerce clients, mentioned interest in finding a better integrated solution')">Use →</button>
+    </div>
+    <div class="lead-row">
+      <div class="av av-t">MR</div>
+      <div class="li">
+        <div class="ln">Marcus Rivera <span class="pill p-blue" style="font-size:10px;padding:1px 7px;margin-left:4px">Day 3 follow-up due</span></div>
+        <div class="ls">Rivera & Associates CPA · Controller · Xero · Professional Services · 15 clients</div>
+      </div>
+      <button class="btn btn-g" onclick="loadLead('Marcus','Rivera & Associates CPA','Controller','Xero','1–20 clients','Professional Services','Referred by DS rep','DS rep noted he manages books for professional services firms and asked about client portal features')">Use →</button>
+    </div>
+    <div class="lead-row">
+      <div class="av av-p">TP</div>
+      <div class="li">
+        <div class="ln">Tanya Patel <span class="pill p-teal" style="font-size:10px;padding:1px 7px;margin-left:4px">Discovery booked ✓</span></div>
+        <div class="ls">Patel CFO Services · Fractional CFO · QuickBooks · Manufacturing · 50+ clients</div>
+      </div>
+      <button class="btn btn-g" onclick="loadLead('Tanya','Patel CFO Services','Fractional CFO','QuickBooks Online','51–100 clients','Manufacturing','Odoo trial / CRM lead','Fractional CFO for manufacturing clients, interested in full ERP integration and inventory-to-accounting flow')">Use →</button>
+    </div>
+    <div class="lead-row">
+      <div class="av av-c">JL</div>
+      <div class="li">
+        <div class="ln">Jason Lee <span class="pill p-gray" style="font-size:10px;padding:1px 7px;margin-left:4px">AcF - Not Active</span></div>
+        <div class="ls">Clearview Tax & Books · Bookkeeper · Sage · General · 8 clients</div>
+      </div>
+      <button class="btn btn-g" onclick="loadLead('Jason','Clearview Tax & Books','Bookkeeper','Sage','1–20 clients','General / Mixed','Directory self-registered','Went cold after initial contact 6 weeks ago. Self-registered on directory but never booked a call.')">Use →</button>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY -->
+<div id="pane-history" class="pane">
+  <div class="card">
+    <div class="slbl">Generated outreach history (this session)</div>
+    <div id="hist-list">
+      <div style="font-size:13px;color:#888;padding:20px 0;text-align:center">No outreach generated yet.<br>Generate your first one in the Compose tab.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SETUP -->
+<div id="pane-setup" class="pane">
+  <div class="card">
+    <div class="slbl">Your agent identity</div>
+    <div class="g2" style="margin-bottom:10px">
+      <input id="cfg-name" value="David Deutsch" placeholder="Your name">
+      <input id="cfg-email" value="davd@odoo.com" placeholder="Your email">
+    </div>
+    <input id="cfg-title" value="Accounting Firm Partnership Manager | Odoo Inc." placeholder="Title / signature line" style="margin-bottom:10px">
+    <input id="cfg-cal" value="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ3otI3uAkfcarrsbKkR691YmvGwtn_62g_aBZSKC3CQEa1lYne1WTOPMg9MSa9379HLlvd6CeuA" placeholder="Discovery call booking link">
+  </div>
+
+  <div class="card">
+    <div class="slbl">Odoo CRM connection</div>
+    <div class="notice">To pull live leads: In Odoo go to <strong>Settings → Technical → API Keys → New</strong>. Copy the key and paste below. Your admin can grant API access under Settings → Users → Technical Access if you don't see the menu.</div>
+    <input id="cfg-odoo-url" placeholder="Odoo URL (e.g. https://yourcompany.odoo.com)" style="margin-bottom:10px">
+    <input id="cfg-odoo-key" placeholder="Odoo API key" style="margin-bottom:10px">
+    <select id="cfg-filter">
+      <option>Filter: tag = Accounting Firm</option>
+      <option>Filter: tag = AcF - Not Active (re-engage)</option>
+      <option>Filter: stage = AcF In-Onboarding</option>
+      <option>Filter: all AcF opportunities</option>
+    </select>
+    <div class="arow">
+      <button class="btn btn-p">Save & test connection</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="slbl">Program knowledge base (agent memory)</div>
+    <div class="irow"><span class="lb">Program cost</span><span class="vl">100% free — no fees, no dues</span></div>
+    <div class="irow"><span class="lb">Pillar 1</span><span class="vl">Free client user seat (no impact on client subscription)</span></div>
+    <div class="irow"><span class="lb">Pillar 2</span><span class="vl">AI invoice digitization + 95% auto-reconciliation</span></div>
+    <div class="irow"><span class="lb">Pillar 3</span><span class="vl">Directory listing on odoo.com → inbound client leads</span></div>
+    <div class="irow"><span class="lb">Pillar 4</span><span class="vl">Direct access to Accounting Experts (Nada Seder)</span></div>
+    <div class="irow"><span class="lb">Firm levels</span><span class="vl">AcF Gold · AcF Silver · AcF Ready</span></div>
+    <div class="irow"><span class="lb">Ideal target</span><span class="vl">CPA / Bookkeeper / Frac CFO managing 5+ clients</span></div>
+    <div class="irow"><span class="lb">Tech trigger</span><span class="vl">Currently on QuickBooks, Xero, Sage, or NetSuite</span></div>
+    <div class="irow"><span class="lb">Discovery flow</span><span class="vl">15-min Discovery → Overview Demo → Technical Demo (Nada)</span></div>
+    <div class="irow"><span class="lb">Disqualifier tags</span><span class="vl">AcF-N, acf-lost (stop outreach — not a firm)</span></div>
+    <div class="irow"><span class="lb">Re-engage tag</span><span class="vl">AcF - Not Active → high priority queue for Bri</span></div>
+    <div class="irow"><span class="lb">Tech expert</span><span class="vl">Nada Seder — Assets, Deferrals, Consolidation</span></div>
+    <div class="irow"><span class="lb">Your phone</span><span class="vl">716-214-3742</span></div>
+  </div>
+</div>
+
+</div>
+<script>
+let tone='professional';
+let currentOut='';
+let currentSubj='';
+let history=[];
+
+function setTone(el,t){
+  document.querySelectorAll('.tone-opt').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+  tone=t;
+}
+
+function go(t){
+  document.querySelectorAll('.tab').forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll('.pane').forEach(e=>e.classList.remove('on'));
+  document.querySelector('[onclick="go(\''+t+'\')"]').classList.add('on');
+  document.getElementById('pane-'+t).classList.add('on');
+}
+
+function getLead(){
+  return{
+    name:document.getElementById('lname').value||'[Name]',
+    firm:document.getElementById('fname').value||'[Firm]',
+    title:document.getElementById('ltitle').value,
+    software:document.getElementById('lsoft').value,
+    size:document.getElementById('lsize').value,
+    industry:document.getElementById('lind').value,
+    how:document.getElementById('lhow').value,
+    notes:document.getElementById('lnotes').value
+  };
+}
+
+function loadLead(name,firm,title,sw,size,ind,how,notes){
+  document.getElementById('lname').value=name;
+  document.getElementById('fname').value=firm;
+  document.getElementById('ltitle').value=title;
+  document.getElementById('lsoft').value=sw;
+  document.getElementById('lsize').value=size;
+  document.getElementById('lind').value=ind;
+  document.getElementById('lhow').value=how;
+  document.getElementById('lnotes').value=notes;
+  document.getElementById('preview-card').style.display='none';
+  go('compose');
+}
+
+function buildPrompt(lead,channel,angle,customInstruction){
+  const angleMap={
+    d1:'Lead with the FREE CLIENT USER SEAT angle — the #1 differentiator that protects client budget.',
+    d2:'Lead with the ERP INTEGRATION & AUTOMATION angle — AI invoice digitization, 95% auto-reconciliation, full business visibility.',
+    d3:'Lead with the DIRECTORY LISTING & GROWTH angle — listed on odoo.com/accounting-firms, inbound client referral pipeline.',
+    handoff:'Write a HANDOFF EMAIL from a DS/CS rep introducing David Deutsch. Warm, professional transition. Rep name placeholder: [Rep Name].',
+    reactivate:'RE-ENGAGEMENT — firm went cold (AcF - Not Active tag). Acknowledge time gap, fresh angle, no pressure.',
+    breakup:'DAY 14 BREAK-UP EMAIL. Permission close: keep on Q3 radar or remove from list? If no reply → tag AcF - Not Active.',
+    auto:'Pick the BEST angle for this lead based on their profile, software, and notes. Briefly justify your choice in one sentence before writing.'
+  };
+  const chanMap={
+    gmail:'Write a COLD OUTREACH EMAIL. Output format: first line "SUBJECT: [subject]", blank line, then email body.',
+    gchat:'Write a GOOGLE CHAT direct message — casual, 3-4 sentences, no subject line, include booking link.',
+    dialpad:'Write a DIALPAD VOICEMAIL SCRIPT — 30 seconds when read aloud, reference prior emails, end with sending a final note.',
+    sequence:'Write the FULL 14-DAY OUTREACH SEQUENCE. Label each: DAY 1 EMAIL, DAY 3 EMAIL, DAY 5 GCHAT, DAY 7 EMAIL, DAY 10 VOICEMAIL, DAY 14 BREAKUP EMAIL.'
+  };
+  const ri=customInstruction?`\nREFINEMENT INSTRUCTION: ${customInstruction}\n`:'';
+  return`${chanMap[channel]||chanMap.gmail}
+ANGLE: ${angleMap[angle]||angleMap.auto}
+TONE: ${tone}
+${ri}
+LEAD PROFILE:
+- Name: ${lead.name}
+- Firm: ${lead.firm}
+- Title: ${lead.title}
+- Current software: ${lead.software}
+- Client volume: ${lead.size}
+- Industry focus: ${lead.industry}
+- Source: ${lead.how}
+- CRM notes / context: ${lead.notes||'None provided'}
+
+Write the outreach now. Be highly specific to this lead — do NOT be generic.`;
+}
+
+async function callClaude(userMsg,onChunk){
+  const resp=await fetch('/api/chat',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({message:userMsg})
+  });
+  if(!resp.ok)throw new Error(`API error ${resp.status}`);
+  const reader=resp.body.getReader();
+  const dec=new TextDecoder();
+  let full='';
+  while(true){
+    const{done,value}=await reader.read();
+    if(done)break;
+    const lines=dec.decode(value).split('\n').filter(l=>l.startsWith('data:'));
+    for(const line of lines){
+      try{
+        const d=JSON.parse(line.slice(5));
+        if(d.type==='content_block_delta'&&d.delta?.text){
+          full+=d.delta.text;
+          onChunk(full);
+        }
+      }catch(e){}
+    }
+  }
+  return full;
+}
+
+function parseOutput(full){
+  if(full.startsWith('SUBJECT:')){
+    const lines=full.split('\n');
+    const subj=lines[0].replace('SUBJECT:','').trim();
+    const body=lines.slice(2).join('\n').trim();
+    return{subj,body};
+  }
+  return{subj:'',body:full.trim()};
+}
+
+async function generate(){
+  const lead=getLead();
+  const channel=document.getElementById('channel').value;
+  const angle=document.getElementById('tpl').value;
+  const btn=document.getElementById('genbtn');
+  btn.disabled=true;
+  btn.innerHTML='<span class="spin">⟳</span> Generating...';
+  const pw=document.getElementById('prog-wrap');
+  const pf=document.getElementById('prog-fill');
+  const pl=document.getElementById('prog-lbl');
+  pw.style.display='block';
+  pf.style.width='15%';
+  pl.textContent='Analyzing lead profile...';
+  setTimeout(()=>{pf.style.width='40%';pl.textContent='Writing personalized outreach...'},500);
+  setTimeout(()=>{pf.style.width='72%';pl.textContent='Applying program knowledge...'},1100);
+  const pc=document.getElementById('preview-card');
+  const pb=document.getElementById('preview-body');
+  const sl=document.getElementById('subj-line');
+  pc.style.display='block';
+  pb.className='preview typing';
+  pb.textContent='';
+  sl.style.display='none';
+  try{
+    const prompt=buildPrompt(lead,channel,angle,null);
+    const full=await callClaude(prompt,(chunk)=>{
+      pf.style.width='90%';
+      const{subj,body}=parseOutput(chunk);
+      if(subj){sl.textContent='Subject: '+subj;sl.style.display='block';}
+      else sl.style.display='none';
+      pb.textContent=body;
+    });
+    const{subj,body}=parseOutput(full);
+    currentSubj=subj;
+    currentOut=body;
+    if(subj){sl.textContent='Subject: '+subj;sl.style.display='block';}
+    pb.textContent=body;
+    pb.className='preview';
+    pf.style.width='100%';
+    pl.textContent='Done!';
+    setTimeout(()=>{pw.style.display='none';pf.style.width='0';},700);
+    const badges={gmail:'<span class="cbadge cb-g">📧 Gmail email</span>',gchat:'<span class="cbadge cb-c">💬 Google Chat</span>',dialpad:'<span class="cbadge cb-d">📞 Dialpad script</span>',sequence:'<span class="cbadge cb-g">📋 Full sequence</span>'};
+    document.getElementById('ch-badge').innerHTML=badges[channel]||badges.gmail;
+    const ol=document.getElementById('open-lbl');
+    ol.textContent=channel==='gchat'?'Open in Chat':channel==='dialpad'?'Copy script':'Open in Gmail';
+    addHistory(lead.name,lead.firm,channel,body);
+    showOk('✓ Outreach generated for '+lead.name+' at '+lead.firm);
+  }catch(err){
+    pb.textContent='Error: '+err.message+'\n\nPlease check your connection and try again.';
+    pb.className='preview';
+    pw.style.display='none';
+  }
+  btn.disabled=false;
+  btn.innerHTML='✨ Generate with AI';
+}
+
+async function refine(instruction){
+  const pb=document.getElementById('preview-body');
+  const sl=document.getElementById('subj-line');
+  if(!currentOut)return;
+  pb.className='preview typing';
+  const lead=getLead();
+  const channel=document.getElementById('channel').value;
+  const angle=document.getElementById('tpl').value;
+  const context=`CURRENT DRAFT:\n${currentSubj?'SUBJECT: '+currentSubj+'\n\n':''}${currentOut}`;
+  const prompt=buildPrompt(lead,channel,angle,instruction)+'\n\n'+context;
+  try{
+    const full=await callClaude(prompt,(chunk)=>{
+      const{subj,body}=parseOutput(chunk);
+      if(subj){sl.textContent='Subject: '+subj;sl.style.display='block';}
+      pb.textContent=body;
+    });
+    const{subj,body}=parseOutput(full);
+    if(subj){currentSubj=subj;sl.textContent='Subject: '+subj;sl.style.display='block';}
+    currentOut=body;
+    pb.textContent=body;
+    pb.className='preview';
+  }catch(e){pb.textContent='Error: '+e.message;pb.className='preview';}
+}
+
+function copyOut(){
+  const text=(currentSubj?'Subject: '+currentSubj+'\n\n':'')+currentOut;
+  if(navigator.clipboard&&text)navigator.clipboard.writeText(text);
+  showOk('Copied to clipboard!');
+}
+
+function openChannel(){
+  const ch=document.getElementById('channel').value;
+  if(ch==='gchat')window.open('https://chat.google.com','_blank');
+  else if(ch==='dialpad'){copyOut();}
+  else{
+    const url=`https://mail.google.com/mail/?view=cm&su=${encodeURIComponent(currentSubj||'')}&body=${encodeURIComponent(currentOut)}`;
+    window.open(url,'_blank');
+  }
+}
+
+function showOk(msg){
+  const ob=document.getElementById('ok-bar');
+  ob.textContent=msg;
+  ob.style.display='block';
+  setTimeout(()=>{ob.style.display='none';},3000);
+}
+
+function addHistory(name,firm,channel,body){
+  const ts=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  history.unshift({name,firm,channel,body,ts});
+  renderHistory();
+}
+
+function renderHistory(){
+  const el=document.getElementById('hist-list');
+  if(!history.length){
+    el.innerHTML='<div style="font-size:13px;color:#888;padding:20px 0;text-align:center">No outreach generated yet.</div>';
+    return;
+  }
+  el.innerHTML=history.slice(0,10).map((h,i)=>`
+    <div class="hist-item" onclick="restoreHist(${i})">
+      <div class="hi-top">
+        <span class="hi-name">${h.name} · ${h.firm}</span>
+        <span style="font-size:11px;color:#888">${h.ts} · ${h.channel}</span>
+      </div>
+      <div class="hi-preview">${h.body.slice(0,100)}...</div>
+    </div>`).join('');
+}
+
+function restoreHist(i){
+  const h=history[i];
+  currentOut=h.body;
+  document.getElementById('preview-body').textContent=h.body;
+  document.getElementById('preview-card').style.display='block';
+  go('compose');
+}
+</script>
+</body>
+</html>
